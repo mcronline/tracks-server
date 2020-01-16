@@ -23,8 +23,7 @@ userSchema.methods.setPassword = function(password){
 
     user.salt = crypto.randomBytes(16);
     
-    user.password = crypto.pbkdf2Sync(password, user.salt, 10, 64, 'sha512').toString('hex');
-    
+    user.password = crypto.pbkdf2Sync(password, user.salt, 10, 64, 'sha512').toString('hex');    
 
 }
 
@@ -32,7 +31,7 @@ userSchema.methods.validatePassword = function(password){
     const user = this;
     
     hashedPassword = crypto.pbkdf2Sync(password, user.salt, 10, 64, 'sha512').toString('hex');
-    
+    console.log(user.password + ' === ' + hashedPassword);
     return user.password === hashedPassword;
 
 }
