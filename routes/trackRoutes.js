@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(requireAuth);
 
 router.get('/tracks', async (req, res) => {
-
+    
     const tracks = await Track.find({ userId : req.user._id});
 
     res.send(tracks);
@@ -22,7 +22,8 @@ router.post('/tracks', async (req, res) => {
     const { name, locations } = req.body;
 
     if(!name || !locations)
-        return res.status(422).send('Please specify name and location');
+        return res
+            .status(422).send({error : 'Please specify name and location' });
 
     const track = new Track({
         name,
@@ -33,10 +34,23 @@ router.post('/tracks', async (req, res) => {
     try{
         await track.save();
         res.send(track)
+
     }catch(err){
-        res.status(422).send('Could not save the track:' + err.message);
+        res.status(422).send({ error : 'Could not save the track:' + err.message });
+
     }
 
+});
+
+router.delete('/tracks', async (req, res) => {
+    try{
+        await Track.deleteOne({userId : req.user._id});
+        res.send();
+
+    }catch(err){        
+        res.status(422).send({ error : 'Could not delete track: ' + err });
+
+    };
 });
 
 module.exports = router;
