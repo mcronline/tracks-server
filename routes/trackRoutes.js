@@ -17,6 +17,19 @@ router.get('/tracks', async (req, res) => {
 
 });
 
+router.get('/tracks/:id', async (req, res) => {
+    const _id = req.param.id;
+
+    try{
+        const track = await Track.deleteOne({_id, userId : req.user._id });
+        res.send(track);
+
+    }catch(err){
+        res.status(422).send({ error : 'Could not find track: ' + err });
+
+    };
+});
+
 router.post('/tracks', async (req, res) => {
 
     const { name, locations } = req.body;
@@ -42,12 +55,14 @@ router.post('/tracks', async (req, res) => {
 
 });
 
-router.delete('/tracks', async (req, res) => {
-    try{
-        await Track.deleteOne({userId : req.user._id});
-        res.send();
+router.delete('/tracks/:id', async (req, res) => {
+    const _id = req.param.id;
 
-    }catch(err){        
+    try{
+        const track = await Track.deleteOne({_id, userId : req.user._id });
+        res.send(track);
+
+    }catch(err){
         res.status(422).send({ error : 'Could not delete track: ' + err });
 
     };
