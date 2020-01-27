@@ -12,7 +12,7 @@ router.use(requireAuth);
 router.get('/tracks', async (req, res) => {
     
     const tracks = await Track.find({ userId : req.user._id});
-
+    
     res.send(tracks);
 
 });
@@ -33,10 +33,10 @@ router.get('/tracks/:id', async (req, res) => {
 router.post('/tracks', async (req, res) => {
 
     const { name, locations } = req.body;
-
+    
     if(!name || !locations)
         return res
-            .status(422).send({error : 'Please specify name and location' });
+            .status(422).send({ error : 'Please specify name and location' });
 
     const track = new Track({
         name,
@@ -56,14 +56,14 @@ router.post('/tracks', async (req, res) => {
 });
 
 router.delete('/tracks/:id', async (req, res) => {
-    const _id = req.param.id;
-
+    const _id = req.params.id;
+    
     try{
         const track = await Track.deleteOne({_id, userId : req.user._id });
         res.send(track);
 
     }catch(err){
-        res.status(422).send({ error : 'Could not delete track: ' + err });
+        res.status(422).send({ error : 'Could not delete track: ' + err.message });
 
     };
 });
