@@ -4,7 +4,7 @@ const modelName = require('../models/modelName');
 const User = mongoose.model(modelName.USERS);
 
 module.exports = (req, res, next) => {
-
+    
     const { authorization } = req.headers;
 
     if(!authorization)
@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
     jwt.verify(token, "MY_SECRET_GOES_HERE", async (err, payload) => {
 
         if(err)
-            return res.status(401).send({ error : "You must be logged in!" });
+            return res.status(401).send({ error : "Invalid Authentication" });
 
         const { userId } = payload;
 
