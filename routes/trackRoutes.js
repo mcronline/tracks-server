@@ -18,10 +18,10 @@ router.get('/tracks', async (req, res) => {
 });
 
 router.get('/tracks/:id', async (req, res) => {
-    const _id = req.param.id;
+    const _id = req.params.id;
 
     try{
-        const track = await Track.deleteOne({_id, userId : req.user._id });
+        const track = await Track.findOne({_id, userId : req.user._id });
         res.send(track);
 
     }catch(err){
@@ -60,6 +60,7 @@ router.delete('/tracks/:id', async (req, res) => {
     
     try{
         const track = await Track.deleteOne({_id, userId : req.user._id });
+        
         res.send(track);
 
     }catch(err){
